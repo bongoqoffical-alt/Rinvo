@@ -875,6 +875,8 @@
       box-shadow: var(--shadow-lg);
       z-index: 102;
       animation: fadeIn 0.3s ease forwards;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     
     .item-modal-header {
@@ -882,11 +884,17 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+      padding: 10px 0;
+      z-index: 1;
     }
     
     .item-modal-header h3 {
       font-size: 18px;
       margin: 0;
+      color: var(--text-dark);
     }
     
     .item-modal-header i {
@@ -894,10 +902,13 @@
       color: var(--text-light);
       cursor: pointer;
       transition: var(--transition);
+      padding: 8px;
+      border-radius: 50%;
     }
     
     .item-modal-header i:hover {
       color: var(--primary);
+      background: rgba(0, 200, 83, 0.1);
     }
     
     .item-form-grid {
@@ -915,15 +926,21 @@
       display: flex;
       gap: 12px;
       margin-top: 16px;
+      position: sticky;
+      bottom: 0;
+      background: var(--bg-card);
+      padding: 10px 0;
+      z-index: 1;
     }
     
     .item-form-buttons button {
       flex: 1;
-      padding: 12px;
+      padding: 14px;
       border-radius: var(--radius-sm);
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
+      font-size: 14px;
     }
     
     .item-form-buttons button.primary {
@@ -932,13 +949,20 @@
       border: none;
     }
     
+    .item-form-buttons button.primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
     .item-form-buttons button.secondary {
       background: transparent;
       color: var(--text-light);
       border: 1px solid #e2e8f0;
     }
     
-    .item-form-buttons button:hover {
+    .item-form-buttons button.secondary:hover {
+      background: #f8fafc;
       transform: translateY(-2px);
       box-shadow: var(--shadow-sm);
     }
@@ -955,6 +979,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 8px;
+      align-items: center;
     }
     
     .item-total-row:last-child {
@@ -980,6 +1005,323 @@
     
     .no-items p {
       margin: 0;
+    }
+
+    /* Enhanced Add Item Button */
+    .add-item-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(0, 200, 83, 0.1), rgba(0, 200, 83, 0.05));
+      color: var(--primary);
+      border: 2px dashed var(--primary);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .add-item-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 200, 83, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .add-item-btn:hover::before {
+      left: 100%;
+    }
+
+    .add-item-btn:hover {
+      background: linear-gradient(135deg, rgba(0, 200, 83, 0.2), rgba(0, 200, 83, 0.1));
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .add-item-btn i {
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .add-item-btn:hover i {
+      transform: scale(1.1);
+    }
+
+    /* Enhanced Item Cards */
+    .item-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .item-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-left-color: var(--primary-dark);
+    }
+
+    .item-details {
+      flex: 1;
+      margin-right: 12px;
+    }
+
+    .item-name {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+
+    .item-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-light);
+      flex-wrap: wrap;
+    }
+
+    .item-price {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 16px;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: 12px;
+    }
+
+    .item-actions i {
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 8px;
+      border-radius: 50%;
+      font-size: 16px;
+    }
+
+    .item-actions i:hover {
+      color: var(--primary);
+      background: rgba(0, 200, 83, 0.1);
+      transform: scale(1.1);
+    }
+
+    .item-actions i.ri-edit-line:hover {
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .item-actions i.ri-delete-bin-line:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Enhanced Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid #e2e8f0;
+      font-family: 'Poppins';
+      font-size: 14px;
+      transition: var(--transition);
+      background: #ffffff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .form-group input:hover,
+    .form-group select:hover,
+    .form-group textarea:hover {
+      border-color: #cbd5e1;
+    }
+
+    /* Error States */
+    .form-group input.error,
+    .form-group textarea.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+    }
+
+    .form-group input.error:focus,
+    .form-group textarea.error:focus {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-card);
+      color: var(--text-dark);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      display: none;
+      animation: slideDown 0.3s ease forwards;
+      max-width: 90%;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .toast.success {
+      background: #10b981;
+      color: white;
+      border-left: 4px solid #059669;
+    }
+
+    .toast.error {
+      background: #ef4444;
+      color: white;
+      border-left: 4px solid #dc2626;
+    }
+
+    .toast.info {
+      background: #3b82f6;
+      color: white;
+      border-left: 4px solid #2563eb;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* Enhanced Mobile Responsiveness */
+    @media (max-width: 480px) {
+      .item-modal {
+        width: calc(100% - 20px);
+        padding: 20px;
+        max-height: 95vh;
+      }
+      
+      .item-form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .item-form-full {
+        grid-column: span 1;
+      }
+      
+      .item-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .item-price {
+        align-self: flex-end;
+        text-align: right;
+      }
+      
+      .item-actions {
+        align-self: flex-end;
+        margin-left: 0;
+      }
+      
+      .add-item-btn {
+        padding: 14px;
+        font-size: 14px;
+      }
+      
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 12px 14px;
+        font-size: 16px; /* Better for mobile input */
+      }
+    }
+
+    @media (max-width: 360px) {
+      .item-modal {
+        width: calc(100% - 16px);
+        padding: 16px;
+      }
+      
+      .item-modal-header {
+        padding: 8px 0;
+      }
+      
+      .item-modal-header h3 {
+        font-size: 16px;
+      }
+      
+      .item-form-buttons {
+        flex-direction: column;
+        gap: 8px;
+      }
     }
   </style>
 </head>
@@ -1490,6 +1832,9 @@
     </div>
   </div>
 
+  <!-- Toast Notifications -->
+  <div id="toast" class="toast"></div>
+
   <!-- Bottom Nav -->
   <div class="bottom-nav">
     <i id="navHome" class="ri-home-line active" onclick="showDashboard()"></i>
@@ -1633,16 +1978,47 @@
       document.getElementById('itemQuantity').value = '1';
       document.getElementById('itemPrice').value = '';
       
-      // Show modal
-      document.getElementById('itemModalTitle').textContent = 'Add New Item';
+      // Show modal with enhanced title
+      const modalTitle = formType === 'quotation' ? 'Add Item to Quotation' : 'Add Item to Bill';
+      document.getElementById('itemModalTitle').textContent = modalTitle;
+      
+      // Show modal with smooth animation
       itemModal.style.display = 'block';
       overlay.style.display = 'block';
+      
+      // Focus on first input for better UX
+      setTimeout(() => {
+        document.getElementById('itemName').focus();
+      }, 100);
+      
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', handleItemModalKeyboard);
+    }
+    
+    // Handle keyboard shortcuts in item modal
+    function handleItemModalKeyboard(event) {
+      if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        addItem();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        hideItemModal();
+      }
     }
     
     // Hide item modal
     function hideItemModal() {
       itemModal.style.display = 'none';
       overlay.style.display = 'none';
+      
+      // Remove keyboard event listener
+      document.removeEventListener('keydown', handleItemModalKeyboard);
+      
+      // Reset form validation states
+      const inputs = itemModal.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.classList.remove('error');
+      });
     }
     
     // Edit item
@@ -1665,20 +2041,54 @@
     
     // Delete item
     function deleteItem(formType, index) {
-      items[formType].splice(index, 1);
-      renderItems(formType);
-      updateTotalAmount(formType);
+      const item = items[formType][index];
+      if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+        items[formType].splice(index, 1);
+        renderItems(formType);
+        updateTotalAmount(formType);
+        showToast(`"${item.name}" removed successfully`, 'info');
+      }
     }
     
     // Add or update item
     function addItem() {
-      const name = document.getElementById('itemName').value;
-      const description = document.getElementById('itemDescription').value;
-      const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
-      const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+      const nameInput = document.getElementById('itemName');
+      const priceInput = document.getElementById('itemPrice');
+      const quantityInput = document.getElementById('itemQuantity');
       
-      if (!name || !price) {
-        alert('Please fill in all required fields');
+      const name = nameInput.value.trim();
+      const description = document.getElementById('itemDescription').value.trim();
+      const quantity = parseInt(quantityInput.value) || 1;
+      const price = parseFloat(priceInput.value) || 0;
+      
+      // Clear previous error states
+      [nameInput, priceInput, quantityInput].forEach(input => {
+        input.classList.remove('error');
+      });
+      
+      // Validation
+      let hasError = false;
+      
+      if (!name) {
+        nameInput.classList.add('error');
+        nameInput.focus();
+        hasError = true;
+      }
+      
+      if (!price || price <= 0) {
+        priceInput.classList.add('error');
+        if (!hasError) priceInput.focus();
+        hasError = true;
+      }
+      
+      if (quantity <= 0) {
+        quantityInput.classList.add('error');
+        if (!hasError) quantityInput.focus();
+        hasError = true;
+      }
+      
+      if (hasError) {
+        showToast('Please fill in all required fields correctly', 'error');
         return;
       }
       
@@ -1687,15 +2097,18 @@
         description,
         quantity,
         price,
-        total: quantity * price
+        total: quantity * price,
+        id: Date.now() + Math.random() // Unique ID for each item
       };
       
       if (editingItemIndex >= 0) {
         // Update existing item
         items[currentFormType][editingItemIndex] = item;
+        showToast('Item updated successfully!', 'success');
       } else {
         // Add new item
         items[currentFormType].push(item);
+        showToast('Item added successfully!', 'success');
       }
       
       // Update UI
@@ -1714,6 +2127,7 @@
           <div class="no-items">
             <i class="ri-file-list-line"></i>
             <p>No items added yet</p>
+            <p style="font-size: 12px; margin-top: 8px; opacity: 0.7;">Click "Add Item" to get started</p>
           </div>
         `;
         return;
@@ -1722,18 +2136,22 @@
       items[formType].forEach((item, index) => {
         const itemElement = document.createElement('div');
         itemElement.className = 'item-card';
+        
+        const descriptionText = item.description ? `• ${item.description}` : '';
+        
         itemElement.innerHTML = `
           <div class="item-details">
             <div class="item-name">${item.name}</div>
             <div class="item-meta">
-              <span>Qty: ${item.quantity}</span>
-              <span>Price: ₹${item.price.toFixed(2)}</span>
+              <span><i class="ri-hashtag" style="font-size: 12px;"></i> ${item.quantity}</span>
+              <span><i class="ri-currency-rupee-line" style="font-size: 12px;"></i> ${item.price.toFixed(2)}</span>
+              ${descriptionText ? `<span><i class="ri-file-text-line" style="font-size: 12px;"></i> ${descriptionText}</span>` : ''}
             </div>
           </div>
           <div class="item-price">₹${item.total.toFixed(2)}</div>
           <div class="item-actions">
-            <i class="ri-edit-line" onclick="editItem('${formType}', ${index})"></i>
-            <i class="ri-delete-bin-line" onclick="deleteItem('${formType}', ${index})"></i>
+            <i class="ri-edit-line" onclick="editItem('${formType}', ${index})" title="Edit Item"></i>
+            <i class="ri-delete-bin-line" onclick="deleteItem('${formType}', ${index})" title="Delete Item"></i>
           </div>
         `;
         container.appendChild(itemElement);
@@ -1978,6 +2396,19 @@
     function closeDocument() {
       closePopup();
     }
+    
+    // Show toast notification
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.style.display = 'block';
+      
+      // Auto hide after 3 seconds
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
 
     // Close popup when clicking outside
     document.addEventListener('click', function(event) {
@@ -2005,9 +2436,42 @@
       document.getElementById('quotationDate').value = today;
       document.getElementById('billDate').value = today;
       
-      // Initialize empty item lists
+      // Add some sample items for demonstration
+      items.quotation = [
+        {
+          name: 'Web Design',
+          description: 'Responsive website design',
+          quantity: 1,
+          price: 1200,
+          total: 1200,
+          id: 1
+        },
+        {
+          name: 'Development',
+          description: 'Frontend development',
+          quantity: 1,
+          price: 800,
+          total: 800,
+          id: 2
+        }
+      ];
+      
+      items.bill = [
+        {
+          name: 'Hosting Service',
+          description: 'Monthly web hosting',
+          quantity: 12,
+          price: 150,
+          total: 1800,
+          id: 3
+        }
+      ];
+      
+      // Initialize item lists
       renderItems('quotation');
       renderItems('bill');
+      updateTotalAmount('quotation');
+      updateTotalAmount('bill');
       
       // Add search functionality
       const searchInput = document.getElementById('searchInput');
@@ -2017,6 +2481,11 @@
           console.log('Searching for:', searchInput.value);
         }
       });
+      
+      // Show welcome message
+      setTimeout(() => {
+        showToast('Welcome to RINVO! Create quotations and bills easily.', 'info');
+      }, 1000);
     });
   </script>
 </body>

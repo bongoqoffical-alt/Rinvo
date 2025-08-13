@@ -858,6 +858,15 @@
       .popup {
         width: calc(100% - 30px);
       }
+      
+      .item-modal {
+        width: calc(100% - 24px);
+        padding: 16px;
+      }
+      
+      .item-form-grid {
+        grid-template-columns: 1fr;
+      }
     }
     
     /* Enhanced Item Management Styles */
@@ -872,6 +881,9 @@
       padding: 24px;
       width: calc(100% - 40px);
       max-width: 400px;
+      max-height: 85vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: var(--shadow-lg);
       z-index: 102;
       animation: fadeIn 0.3s ease forwards;
@@ -908,7 +920,7 @@
     }
     
     .item-form-full {
-      grid-column: span 2;
+      grid-column: 1 / -1;
     }
     
     .item-form-buttons {
@@ -1396,7 +1408,7 @@
     
     <div class="item-form-buttons">
       <button class="secondary" onclick="hideItemModal()">Cancel</button>
-      <button class="primary" onclick="addItem()">Add Item</button>
+      <button id="itemModalSubmitButton" class="primary" onclick="addItem()">Add Item</button>
     </div>
   </div>
 
@@ -1616,6 +1628,7 @@
 
     // Close popup function
     function closePopup() {
+      hideItemModal();
       overlay.style.display = "none";
       actionPopup.style.display = "none";
       listPopup.style.display = "none";
@@ -1635,14 +1648,18 @@
       
       // Show modal
       document.getElementById('itemModalTitle').textContent = 'Add New Item';
+      document.getElementById('itemModalSubmitButton').textContent = 'Add Item';
       itemModal.style.display = 'block';
       overlay.style.display = 'block';
+      // Focus first field for faster entry on mobile
+      document.getElementById('itemName').focus();
     }
     
     // Hide item modal
     function hideItemModal() {
       itemModal.style.display = 'none';
       overlay.style.display = 'none';
+      editingItemIndex = -1;
     }
     
     // Edit item
@@ -1659,6 +1676,7 @@
       
       // Show modal
       document.getElementById('itemModalTitle').textContent = 'Edit Item';
+      document.getElementById('itemModalSubmitButton').textContent = 'Update Item';
       itemModal.style.display = 'block';
       overlay.style.display = 'block';
     }

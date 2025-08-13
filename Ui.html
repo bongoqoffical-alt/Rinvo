@@ -48,6 +48,9 @@
       padding: 20px;
       padding-bottom: 100px;
       transition: transform 0.3s ease, opacity 0.3s ease;
+      min-height: calc(100vh - 140px);
+      display: flex;
+      flex-direction: column;
     }
 
     /* Header Styles */
@@ -603,6 +606,9 @@
       max-width: 420px;
       margin: 0 auto;
       padding-bottom: 100px;
+      min-height: calc(100vh - 140px);
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .form-header {
@@ -618,7 +624,7 @@
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .form-group label {
@@ -633,12 +639,16 @@
     .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
       border: 1px solid #e2e8f0;
       font-family: 'Poppins';
-      font-size: 14px;
+      font-size: 15px;
       transition: var(--transition);
+      min-height: 48px;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     .form-group input:focus,
@@ -739,20 +749,40 @@
       background: rgba(0, 200, 83, 0.1);
       color: var(--primary);
       border: 1px dashed var(--primary);
-      border-radius: var(--radius-sm);
-      padding: 12px;
+      border-radius: var(--radius-md);
+      padding: 18px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
+      margin: 20px 0;
+      min-height: 56px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .add-item-btn:hover {
       background: rgba(0, 200, 83, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.2);
+    }
+
+    .add-item-btn:active {
+      transform: translateY(0);
+      background: rgba(0, 200, 83, 0.25);
+    }
+
+    .add-item-btn i {
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .add-item-btn:hover i {
+      transform: scale(1.1);
     }
 
     /* Item Form Styles */
@@ -858,6 +888,22 @@
       .popup {
         width: calc(100% - 30px);
       }
+      
+      .item-modal {
+        width: calc(100% - 20px);
+        padding: 20px;
+      }
+      
+      .add-item-btn {
+        padding: 16px;
+        font-size: 14px;
+      }
+      
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
     }
     
     /* Enhanced Item Management Styles */
@@ -869,12 +915,98 @@
       transform: translate(-50%, -50%);
       background: var(--bg-card);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      width: calc(100% - 40px);
-      max-width: 400px;
+      padding: 25px;
+      width: calc(100% - 30px);
+      max-width: 420px;
       box-shadow: var(--shadow-lg);
       z-index: 102;
-      animation: fadeIn 0.3s ease forwards;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: modalSlideUp 0.3s ease-out;
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    /* Validation and Loading States */
+    .form-group.error input,
+    .form-group.error select,
+    .form-group.error textarea {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-group .error-message {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    .form-group.success input,
+    .form-group.success select,
+    .form-group.success textarea {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+    }
+
+    .loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid transparent;
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
     }
     
     .item-modal-header {
@@ -903,8 +1035,15 @@
     .item-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 380px) {
+      .item-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
     }
     
     .item-form-full {
@@ -1672,15 +1811,47 @@
     
     // Add or update item
     function addItem() {
-      const name = document.getElementById('itemName').value;
-      const description = document.getElementById('itemDescription').value;
+      // Clear previous validation states
+      clearValidationErrors();
+      
+      const name = document.getElementById('itemName').value.trim();
+      const description = document.getElementById('itemDescription').value.trim();
       const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
       const price = parseFloat(document.getElementById('itemPrice').value) || 0;
       
-      if (!name || !price) {
-        alert('Please fill in all required fields');
+      let hasErrors = false;
+      
+      // Validate name
+      if (!name) {
+        showFieldError('itemName', 'Item name is required');
+        hasErrors = true;
+      }
+      
+      // Validate price
+      if (!price || price <= 0) {
+        showFieldError('itemPrice', 'Price must be greater than 0');
+        hasErrors = true;
+      }
+      
+      // Validate quantity
+      if (quantity <= 0) {
+        showFieldError('itemQuantity', 'Quantity must be greater than 0');
+        hasErrors = true;
+      }
+      
+      if (hasErrors) {
         return;
       }
+      
+      // Show loading state
+      const submitBtn = document.querySelector('.item-form-buttons .primary');
+      submitBtn.classList.add('loading');
+      submitBtn.textContent = '';
+      
+      // Simulate processing delay
+      setTimeout(() => {
+        submitBtn.classList.remove('loading');
+        submitBtn.textContent = editingItemIndex >= 0 ? 'Update Item' : 'Add Item';
       
       const item = {
         name,
@@ -1698,10 +1869,61 @@
         items[currentFormType].push(item);
       }
       
-      // Update UI
-      renderItems(currentFormType);
-      updateTotalAmount(currentFormType);
-      hideItemModal();
+        // Update UI
+        renderItems(currentFormType);
+        updateTotalAmount(currentFormType);
+        hideItemModal();
+        
+        // Show success feedback
+        showSuccessMessage(editingItemIndex >= 0 ? 'Item updated successfully!' : 'Item added successfully!');
+      }, 300);
+    }
+
+    // Validation helper functions
+    function showFieldError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const formGroup = field.closest('.form-group');
+      formGroup.classList.add('error');
+      
+      let errorMessage = formGroup.querySelector('.error-message');
+      if (!errorMessage) {
+        errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        formGroup.appendChild(errorMessage);
+      }
+      errorMessage.textContent = message;
+    }
+
+    function clearValidationErrors() {
+      document.querySelectorAll('.form-group.error').forEach(group => {
+        group.classList.remove('error');
+      });
+    }
+
+    function showSuccessMessage(message) {
+      // Create a temporary success notification
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideDown 0.3s ease-out;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideUp 0.3s ease-out forwards';
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
     }
     
     // Render items list

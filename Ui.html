@@ -872,6 +872,8 @@
       padding: 24px;
       width: calc(100% - 40px);
       max-width: 400px;
+      max-height: 85vh;
+      overflow-y: auto;
       box-shadow: var(--shadow-lg);
       z-index: 102;
       animation: fadeIn 0.3s ease forwards;
@@ -1401,7 +1403,7 @@
   </div>
 
   <!-- Overlay -->
-  <div id="overlay" class="overlay" onclick="closePopup()"></div>
+  <div id="overlay" class="overlay" onclick="closePopup(); hideItemModal();"></div>
 
   <!-- Popups -->
   <div id="actionPopup" class="popup">
@@ -1637,6 +1639,9 @@
       document.getElementById('itemModalTitle').textContent = 'Add New Item';
       itemModal.style.display = 'block';
       overlay.style.display = 'block';
+      
+      // Focus first input for better UX
+      setTimeout(() => document.getElementById('itemName').focus(), 0);
     }
     
     // Hide item modal

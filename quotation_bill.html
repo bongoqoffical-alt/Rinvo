@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quotation & Billing</title>
+  <!-- Google Font & RemixIcon CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet"/>
+  <style>
+    /* ---------- CSS VARIABLES ---------- */
+    :root {
+      --primary: #00c853;
+      --primary-light: #b8ff8c;
+      --primary-dark: #009624;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --white: #ffffff;
+      --bg-light: #f8fafc;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 30px rgba(0,0,0,0.15);
+      --transition: all .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ---------- RESET ---------- */
+    *,*::before,*::after{box-sizing:border-box;padding:0;margin:0}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--bg-light);
+      color:var(--text-dark);
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:25px 12px;
+    }
+
+    /* ---------- LAYOUT ---------- */
+    .app{
+      width:100%;
+      max-width:420px;
+      background:var(--white);
+      padding:24px 20px 40px;
+      border-radius:var(--radius-md);
+      box-shadow:var(--shadow-sm);
+    }
+
+    .tabs{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin-bottom:20px;
+    }
+    .tabs button{
+      flex:1;
+      background:var(--bg-light);
+      border:1.5px solid transparent;
+      padding:10px 0;
+      border-radius:var(--radius-sm);
+      font-weight:600;
+      color:var(--text-dark);
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .tabs button.active{
+      background:rgba(0,200,83,.15);
+      border-color:var(--primary);
+      color:var(--primary-dark);
+    }
+
+    /* ---------- FORM SECTION ---------- */
+    .form-section{display:none;animation:fadeIn .3s ease forwards}
+    .form-section.active{display:block}
+
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:14px;margin-bottom:6px;color:var(--text-light)}
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #e2e8f0;
+      border-radius:var(--radius-sm);
+      font-family:inherit;
+      font-size:14px;
+      outline:none;
+      transition:var(--transition);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus{border-color:var(--primary)}
+
+    /* ---------- ITEM LIST ---------- */
+    .item-list{margin:12px 0}
+    .item-card{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--bg-light);
+      padding:10px 12px;
+      border-radius:var(--radius-sm);
+      margin-bottom:8px;
+    }
+    .item-card .meta{font-size:12px;color:var(--text-light)}
+    .item-card i{cursor:pointer;color:var(--text-light);transition:var(--transition)}
+    .item-card i:hover{color:#ef4444}
+
+    .totals{background:var(--bg-light);padding:12px;border-radius:var(--radius-sm);margin-bottom:16px}
+    .totals div{display:flex;justify-content:space-between;margin-bottom:4px;font-size:14px}
+    .totals div:last-child{font-weight:600;font-size:15px}
+
+    /* ---------- BUTTONS ---------- */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;border:none;font-family:inherit;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:var(--white)}
+    .btn-secondary{background:transparent;color:var(--text-dark);border:1px solid #e2e8f0}
+    .btn-add{background:rgba(0,200,83,.08);color:var(--primary-dark);width:100%;margin-top:8px}
+    .btn:hover{opacity:.9}
+
+    /* ---------- ITEM MODAL ---------- */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:98}
+    .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--white);width:calc(100%-40px);max-width:400px;padding:24px;border-radius:var(--radius-md);box-shadow:var(--shadow-lg);display:none;z-index:99;animation:scaleIn .25s ease forwards}
+
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .modal-header h3{font-size:18px}
+    .modal-header i{font-size:20px;color:var(--text-light);cursor:pointer}
+
+    .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .full{grid-column:span 2}
+
+    /* ---------- ANIMATIONS ---------- */
+    @keyframes fadeIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+    @keyframes scaleIn{0%{opacity:0;transform:translate(-50%,-60%) scale(.9)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+    /* ---------- RESPONSIVE ---------- */
+    @media(max-width:420px){.app{padding:20px 16px 32px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h2 style="text-align:center;margin-bottom:16px">Quotation & Billing</h2>
+    <!-- TABS -->
+    <div class="tabs">
+      <button id="tabQuotation" class="active" onclick="showForm('quotation')"><i class="ri-file-add-line"></i> Quotation</button>
+      <button id="tabBill" onclick="showForm('bill')"><i class="ri-receipt-line"></i> Bill</button>
+    </div>
+
+    <!-- QUOTATION FORM -->
+    <section id="formQuotation" class="form-section active">
+      <div class="form-group">
+        <label for="qClient">Client Name</label>
+        <input id="qClient" type="text" placeholder="Enter client name" />
+      </div>
+      <div class="form-group">
+        <label for="qDate">Date</label>
+        <input id="qDate" type="date" />
+      </div>
+      <div class="form-group">
+        <label>Items</label>
+        <div id="qItems" class="item-list"></div>
+        <button class="btn btn-add" onclick="openItemModal('quotation')"><i class="ri-add-line"></i> Add Item</button>
+      </div>
+      <div class="totals" id="qTotals"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="submitForm('quotation')">Create Quotation</button>
+    </section>
+
+    <!-- BILL FORM -->
+    <section id="formBill" class="form-section">
+      <div class="form-group">
+        <label for="bClient">Client Name</label>
+        <input id="bClient" type="text" placeholder="Enter client name" />
+      </div>
+      <div class="form-group">
+        <label for="bDate">Date</label>
+        <input id="bDate" type="date" />
+      </div>
+      <div class="form-group">
+        <label for="bPayment">Payment Method</label>
+        <select id="bPayment">
+          <option value="">Select method</option>
+          <option value="cash">Cash</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="card">Credit/Debit Card</option>
+          <option value="upi">UPI</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Items</label>
+        <div id="bItems" class="item-list"></div>
+        <button class="btn btn-add" onclick="openItemModal('bill')"><i class="ri-add-line"></i> Add Item</button>
+      </div>
+      <div class="totals" id="bTotals"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="submitForm('bill')">Create Bill</button>
+    </section>
+  </div>
+
+  <!-- OVERLAY + MODAL -->
+  <div id="overlay" class="overlay"></div>
+  <div id="itemModal" class="modal">
+    <div class="modal-header">
+      <h3 id="itemModalTitle">Add Item</h3>
+      <i class="ri-close-line" onclick="closeItemModal()"></i>
+    </div>
+    <div class="modal-grid">
+      <div class="form-group full">
+        <label for="itemName">Item Name</label>
+        <input id="itemName" type="text" placeholder="Enter item name" />
+      </div>
+      <div class="form-group full">
+        <label for="itemDescription">Description (optional)</label>
+        <textarea id="itemDescription" rows="2" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="itemQty">Qty</label>
+        <input id="itemQty" type="number" min="1" value="1" />
+      </div>
+      <div class="form-group">
+        <label for="itemPrice">Price (₹)</label>
+        <input id="itemPrice" type="number" min="0" step="0.01" />
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:18px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeItemModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveItem()">Save</button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const forms = {
+      quotation: {
+        tab: document.getElementById('tabQuotation'),
+        section: document.getElementById('formQuotation'),
+        client: document.getElementById('qClient'),
+        date: document.getElementById('qDate'),
+        itemsWrap: document.getElementById('qItems'),
+        totals: document.getElementById('qTotals')
+      },
+      bill: {
+        tab: document.getElementById('tabBill'),
+        section: document.getElementById('formBill'),
+        client: document.getElementById('bClient'),
+        date: document.getElementById('bDate'),
+        payment: document.getElementById('bPayment'),
+        itemsWrap: document.getElementById('bItems'),
+        totals: document.getElementById('bTotals')
+      }
+    };
+
+    const overlay = document.getElementById('overlay');
+    const itemModal = document.getElementById('itemModal');
+    const itemFields = {
+      name: document.getElementById('itemName'),
+      desc: document.getElementById('itemDescription'),
+      qty: document.getElementById('itemQty'),
+      price: document.getElementById('itemPrice')
+    };
+
+    let activeForm = 'quotation';
+    let editingIndex = -1;
+    const data = { quotation: [], bill: [] };
+
+    /* ---------- FORM SWITCH ---------- */
+    function showForm(type){
+      activeForm = type;
+      Object.keys(forms).forEach(key=>{
+        forms[key].section.classList.toggle('active',key===type);
+        forms[key].tab.classList.toggle('active',key===type);
+      });
+      updateTotals(type);
+      renderItems(type);
+    }
+
+    /* ---------- ITEM MODAL ---------- */
+    function openItemModal(form){
+      activeForm = form; // keep consistent
+      editingIndex = -1;
+      itemModal.style.display='block';
+      overlay.style.display='block';
+      document.getElementById('itemModalTitle').textContent='Add Item';
+      itemFields.name.value='';
+      itemFields.desc.value='';
+      itemFields.qty.value='1';
+      itemFields.price.value='';
+    }
+    function closeItemModal(){
+      itemModal.style.display='none';
+      overlay.style.display='none';
+    }
+
+    function saveItem(){
+      const name = itemFields.name.value.trim();
+      const qty = parseInt(itemFields.qty.value) || 1;
+      const price = parseFloat(itemFields.price.value) || 0;
+      if(!name||price<=0){alert('Please enter item name & price');return;}
+      const item = {
+        name,
+        desc: itemFields.desc.value.trim(),
+        qty,
+        price,
+        total: qty*price
+      };
+      data[activeForm].push(item);
+      renderItems(activeForm);
+      updateTotals(activeForm);
+      closeItemModal();
+    }
+
+    /* ---------- RENDER & UPDATE ---------- */
+    function renderItems(form){
+      const wrap = forms[form].itemsWrap;
+      wrap.innerHTML='';
+      if(data[form].length===0){
+        wrap.innerHTML='<p style="text-align:center;color:var(--text-light);font-size:14px">No items added</p>';
+        return;
+      }
+      data[form].forEach((item,idx)=>{
+        const div=document.createElement('div');
+        div.className='item-card';
+        div.innerHTML=`<div><div>${item.name}</div><div class="meta">Qty: ${item.qty} • ₹${item.price.toFixed(2)}</div></div><div>₹${item.total.toFixed(2)}</div>`;
+        const del=document.createElement('i');
+        del.className='ri-delete-bin-line';
+        del.onclick=()=>{data[form].splice(idx,1);renderItems(form);updateTotals(form)};
+        div.appendChild(del);
+        wrap.appendChild(div);
+      });
+    }
+
+    function updateTotals(form){
+      const totalsEl=forms[form].totals;
+      const subtotal=data[form].reduce((s,i)=>s+i.total,0);
+      const tax=subtotal*0.05;
+      const total=subtotal+tax;
+      totalsEl.innerHTML=`<div><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div><div><span>Tax (5%)</span><span>₹${tax.toFixed(2)}</span></div><div><span>Total</span><span>₹${total.toFixed(2)}</span></div>`;
+    }
+
+    /* ---------- SUBMIT ---------- */
+    function submitForm(form){
+      const client=forms[form].client.value.trim();
+      const date=forms[form].date.value;
+      if(!client||!date||data[form].length===0){alert('Please complete the form and add items');return;}
+      if(form==='bill'&&!forms.bill.payment.value){alert('Please select a payment method');return;}
+      alert(`${form==='quotation'?'Quotation':'Bill'} created for ${client} (₹${data[form].reduce((s,i)=>s+i.total,0).toFixed(2)}) with ${data[form].length} items.`);
+      // reset
+      forms[form].client.value='';
+      if(form==='bill')forms.bill.payment.value='';
+      data[form]=[];
+      renderItems(form);
+      updateTotals(form);
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      const today=new Date().toISOString().split('T')[0];
+      forms.quotation.date.value=today;
+      forms.bill.date.value=today;
+      updateTotals('quotation');
+      updateTotals('bill');
+    });
+  </script>
+</body>
+</html>

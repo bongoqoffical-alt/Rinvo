@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RINVO App - Enhanced Item Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00c853;
+      --primary-light: #b8ff8c;
+      --primary-dark: #009624;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --bg-card: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 10px rgba(0,0,0,0.1);
+      --shadow-lg: 0 12px 30px rgba(0,0,0,0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-light);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Container Styles */
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-bottom: 100px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Header Styles */
+    .profile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .profile .logo {
+      height: 30px;
+    }
+
+    .profile .logo-mobile {
+      display: block;
+    }
+
+    .profile .logo-desktop {
+      display: none;
+    }
+
+    .profile img.user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .profile img.user-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    /* Greeting Styles */
+    .greeting {
+      margin: 20px 0 10px;
+    }
+
+    .greeting h2 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .greeting p {
+      font-size: 14px;
+      color: var(--text-light);
+      margin: 4px 0 0;
+    }
+
+    /* Card Styles */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card.green {
+      background: var(--primary-light);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+
+    .card.green h3 {
+      color: var(--primary-dark);
+    }
+
+    .card p {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 8px 0 0;
+      color: var(--text-dark);
+    }
+
+    .card.green p {
+      color: var(--primary-dark);
+    }
+
+    /* Revenue Styles */
+    .revenue {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-top: 16px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .revenue:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .revenue h4 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-light);
+      margin: 0 0 8px;
+    }
+
+    .revenue p {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--primary-dark);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      z-index: 100;
+      backdrop-filter: blur(5px);
+    }
+
+    .bottom-nav i {
+      font-size: 22px;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .bottom-nav i.active {
+      color: var(--primary);
+      background: rgba(0, 200, 83, 0.1);
+    }
+
+    .bottom-nav i:hover {
+      color: var(--primary);
+    }
+
+    .bottom-nav i.primary {
+      color: var(--primary);
+      font-size: 24px;
+    }
+
+    /* Overlay and Popup Styles */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      animation: fadeInOverlay 0.3s ease forwards;
+      z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: 85px;
+      transform: translateX(-50%);
+      background: var(--bg-card);
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      width: calc(100% - 40px);
+      max-width: 320px;
+      box-shadow: var(--shadow-lg);
+      z-index: 101;
+      animation: popupShow 0.25s ease forwards;
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .popup-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .popup-header i {
+      font-size: 20px;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .popup-header i:hover {
+      transform: rotate(90deg);
+      color: var(--primary);
+    }
+
+    .popup-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .popup-options button {
+      flex: 1;
+      background: rgba(0, 200, 83, 0.08);
+      border: 1.8px solid var(--primary);
+      color: var(--primary-dark);
+      border-radius: var(--radius-sm);
+      padding: 14px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .popup-options button i {
+      font-size: 22px;
+    }
+
+    .popup-options button:hover {
+      background: rgba(0, 200, 83, 0.15);
+      transform: scale(1.03);
+    }
+
+    .popup .cancel-btn {
+      margin-top: 16px;
+      width: 100%;
+      background: #f8fafc;
+      color: var(--text-light);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      transition: var(--transition);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .popup .cancel-btn:hover {
+      background: #f1f5f9;
+    }
+
+    /* List Section Styles */
+    .list-section {
+      display: none;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .list-section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px;
+    }
+
+    .list-card {
+      background: var(--bg-card);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .list-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .list-card .info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .list-card .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(0, 200, 83, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+
+    .list-card .icon.bill {
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+    }
+
+    .list-card .details h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .list-card .details p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .list-card .amount {
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    /* Empty State Styles */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: var(--text-light);
+      opacity: 0.5;
+    }
+
+    .empty-state h4 {
+      margin: 16px 0 8px;
+      font-size: 16px;
+      color: var(--text-dark);
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    /* Search Section Styles */
+    .search-section {
+      display: none;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .search-section .search-bar {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-section .search-bar input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #e2e8f0;
+      font-family: 'Poppins';
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .search-section .search-bar input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+    }
+
+    .search-section .search-bar i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    /* Profile Section Styles */
+    .profile-section {
+      display: none;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .profile-header {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid var(--primary-light);
+      margin: 0 auto 15px;
+      overflow: hidden;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .profile-email {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 15px 10px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-card .value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 5px;
+    }
+
+    .profile-menu {
+      margin-top: 20px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .menu-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .menu-item i {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(0, 200, 83, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 18px;
+      margin-right: 15px;
+    }
+
+    .menu-item.bill i {
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+    }
+
+    .menu-item.logout i {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    .menu-item .menu-content {
+      flex: 1;
+    }
+
+    .menu-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .menu-item p {
+      font-size: 13px;
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* Document Creation Form */
+    .create-form {
+      display: none;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+
+    .form-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .form-header h3 {
+      font-size: 18px;
+      margin: 0;
+      flex: 1;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #e2e8f0;
+      font-family: 'Poppins';
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .form-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .form-actions button.primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .form-actions button.secondary {
+      background: transparent;
+      color: var(--text-light);
+      border: 1px solid #e2e8f0;
+    }
+
+    .form-actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Item List Styles */
+    .item-list {
+      margin: 16px 0;
+    }
+
+    .item-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .item-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .item-price {
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item-actions i {
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .item-actions i:hover {
+      color: var(--primary);
+    }
+
+    .add-item-btn {
+      width: 100%;
+      background: rgba(0, 200, 83, 0.1);
+      color: var(--primary);
+      border: 1px dashed var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .add-item-btn:hover {
+      background: rgba(0, 200, 83, 0.2);
+    }
+
+    /* Item Form Styles */
+    .item-form {
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .item-form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .item-form-header h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .item-form-header i {
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .item-form-header i:hover {
+      color: var(--primary);
+    }
+
+    /* Total Amount Styles */
+    .total-amount {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .total-amount h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .total-amount p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-active {
+      display: block;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popupShow {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      .profile .logo-mobile {
+        display: none;
+      }
+      .profile .logo-desktop {
+        display: block;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .container, .list-section, .search-section, .profile-section, .create-form {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .popup {
+        width: calc(100% - 30px);
+      }
+    }
+    
+    /* Enhanced Item Management Styles */
+    .item-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      width: calc(100% - 40px);
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+      z-index: 102;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    .item-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .item-modal-header h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+    
+    .item-modal-header i {
+      font-size: 22px;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .item-modal-header i:hover {
+      color: var(--primary);
+    }
+    
+    .item-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .item-form-full {
+      grid-column: span 2;
+    }
+    
+    .item-form-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .item-form-buttons button {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .item-form-buttons button.primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+    
+    .item-form-buttons button.secondary {
+      background: transparent;
+      color: var(--text-light);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .item-form-buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .item-total-card {
+      background: rgba(0, 200, 83, 0.05);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid var(--primary-light);
+    }
+    
+    .item-total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .item-total-row:last-child {
+      margin-bottom: 0;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--primary-dark);
+      padding-top: 8px;
+      border-top: 1px solid var(--primary-light);
+    }
+    
+    .no-items {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--text-light);
+    }
+    
+    .no-items i {
+      font-size: 48px;
+      opacity: 0.3;
+      margin-bottom: 16px;
+    }
+    
+    .no-items p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dashboard Section -->
+  <div id="dashboardSection" class="container section-active">
+    <div class="profile">
+      <img src="https://cdn-icons-png.flaticon.com/512/3874/3874170.png" alt="RINVO Logo" class="logo logo-mobile" style="width: 30px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/3874/3874170.png" alt="RINVO Logo" class="logo logo-desktop" style="width: 30px;">
+      <img src="https://i.pravatar.cc/40?img=5" alt="User" class="user-avatar" onclick="showProfile()">
+    </div>
+
+    <div class="greeting">
+      <h2>Hello, Jany</h2>
+      <p>Welcome back to your dashboard</p>
+    </div>
+
+    <div class="cards">
+      <div class="card green" onclick="showList('quotation')">
+        <h3>Invoices</h3>
+        <p>18</p>
+      </div>
+      <div class="card" onclick="showList('bill')">
+        <h3>Projects</h3>
+        <p>10</p>
+      </div>
+    </div>
+
+    <div class="revenue">
+      <h4>Total Revenue</h4>
+      <p>₹5,340</p>
+    </div>
+  </div>
+
+  <!-- Quotations Section -->
+  <div id="quotationSection" class="list-section">
+    <h3>Created Quotations</h3>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1001')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1001</h4>
+          <p>Client: ABC Corp • 12 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹2,000</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1002')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1002</h4>
+          <p>Client: XYZ Ltd • 8 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹1,800</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1003')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1003</h4>
+          <p>Client: Example Inc • 1 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹3,500</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1004')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1004</h4>
+          <p>Client: Tech Solutions • 28 May 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹4,200</div>
+    </div>
+  </div>
+
+  <!-- Bills Section -->
+  <div id="billSection" class="list-section">
+    <h3>Created Bills</h3>
+    
+    <div class="list-card" onclick="openDocument('bill', '5001')">
+      <div class="info">
+        <div class="icon bill">
+          <i class="ri-bill-line"></i>
+        </div>
+        <div class="details">
+          <h4>Bill #5001</h4>
+          <p>Client: ABC Corp • 15 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹3,400</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('bill', '5002')">
+      <div class="info">
+        <div class="icon bill">
+          <i class="ri-bill-line"></i>
+        </div>
+        <div class="details">
+          <h4>Bill #5002</h4>
+          <p>Client: XYZ Ltd • 10 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹2,500</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('bill', '5003')">
+      <div class="info">
+        <div class="icon bill">
+          <i class="ri-bill-line"></i>
+        </div>
+        <div class="details">
+          <h4>Bill #5003</h4>
+          <p>Client: Global Tech • 5 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹5,700</div>
+    </div>
+    
+    <div class="empty-state">
+      <i class="ri-folder-open-line"></i>
+      <h4>No more bills</h4>
+      <p>Create a new bill to get started</p>
+    </div>
+  </div>
+
+  <!-- Search Section -->
+  <div id="searchSection" class="search-section">
+    <div class="search-bar">
+      <i class="ri-search-line"></i>
+      <input type="text" id="searchInput" placeholder="Search documents, clients...">
+    </div>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1001')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1001</h4>
+          <p>Client: ABC Corp • 12 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹2,000</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('bill', '5001')">
+      <div class="info">
+        <div class="icon bill">
+          <i class="ri-bill-line"></i>
+        </div>
+        <div class="details">
+          <h4>Bill #5001</h4>
+          <p>Client: ABC Corp • 15 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹3,400</div>
+    </div>
+    
+    <div class="list-card" onclick="openDocument('quotation', '1003')">
+      <div class="info">
+        <div class="icon">
+          <i class="ri-file-text-line"></i>
+        </div>
+        <div class="details">
+          <h4>Quotation #1003</h4>
+          <p>Client: Example Inc • 1 Jun 2023</p>
+        </div>
+      </div>
+      <div class="amount">₹3,500</div>
+    </div>
+    
+    <div class="empty-state">
+      <i class="ri-search-line"></i>
+      <h4>No more results</h4>
+      <p>Try a different search term</p>
+    </div>
+  </div>
+
+  <!-- Profile Section -->
+  <div id="profileSection" class="profile-section">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img src="https://i.pravatar.cc/100?img=5" alt="User">
+      </div>
+      <h2 class="profile-name">Jany Doe</h2>
+      <p class="profile-email">jany@example.com</p>
+    </div>
+    
+    <div class="profile-stats">
+      <div class="stat-card">
+        <div class="value">18</div>
+        <div class="label">Quotations</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">12</div>
+        <div class="label">Bills</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">₹53.4k</div>
+        <div class="label">Revenue</div>
+      </div>
+    </div>
+    
+    <div class="profile-menu">
+      <div class="menu-item" onclick="showList('quotation')">
+        <i class="ri-file-text-line"></i>
+        <div class="menu-content">
+          <h4>My Quotations</h4>
+          <p>View and manage quotations</p>
+        </div>
+        <i class="ri-arrow-right-s-line"></i>
+      </div>
+      
+      <div class="menu-item bill" onclick="showList('bill')">
+        <i class="ri-bill-line"></i>
+        <div class="menu-content">
+          <h4>My Bills</h4>
+          <p>View and manage bills</p>
+        </div>
+        <i class="ri-arrow-right-s-line"></i>
+      </div>
+      
+      <div class="menu-item" onclick="alert('Settings opened')">
+        <i class="ri-settings-3-line"></i>
+        <div class="menu-content">
+          <h4>Settings</h4>
+          <p>App preferences and configurations</p>
+        </div>
+        <i class="ri-arrow-right-s-line"></i>
+      </div>
+      
+      <div class="menu-item" onclick="alert('Support contacted')">
+        <i class="ri-customer-service-2-line"></i>
+        <div class="menu-content">
+          <h4>Support</h4>
+          <p>Get help with the app</p>
+        </div>
+        <i class="ri-arrow-right-s-line"></i>
+      </div>
+      
+      <div class="menu-item logout" onclick="alert('User logged out')">
+        <i class="ri-logout-box-r-line"></i>
+        <div class="menu-content">
+          <h4>Logout</h4>
+          <p>Sign out of your account</p>
+        </div>
+        <i class="ri-arrow-right-s-line"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quotation Creation Form -->
+  <div id="createQuotationForm" class="create-form">
+    <div class="form-header">
+      <i class="ri-arrow-left-line" style="font-size: 20px; cursor: pointer; margin-right: 10px;" onclick="showDashboard()"></i>
+      <h3>Create Quotation</h3>
+    </div>
+    
+    <div class="form-group">
+      <label for="clientName">Client Name</label>
+      <input type="text" id="clientName" placeholder="Enter client name">
+    </div>
+    
+    <div class="form-group">
+      <label for="quotationDate">Date</label>
+      <input type="date" id="quotationDate">
+    </div>
+    
+    <div class="form-group">
+      <label>Items</label>
+      <div class="item-list" id="quotationItemsList">
+        <div class="no-items">
+          <i class="ri-file-list-line"></i>
+          <p>No items added yet</p>
+        </div>
+      </div>
+      <button class="add-item-btn" onclick="showItemModal('quotation')">
+        <i class="ri-add-line"></i> Add Item
+      </button>
+    </div>
+    
+    <div class="item-total-card">
+      <div class="item-total-row">
+        <span>Subtotal</span>
+        <span id="quotationSubtotal">₹0</span>
+      </div>
+      <div class="item-total-row">
+        <span>Tax (5%)</span>
+        <span id="quotationTax">₹0</span>
+      </div>
+      <div class="item-total-row">
+        <span>Total Amount</span>
+        <span id="quotationTotalAmount">₹0</span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="quotationNotes">Notes</label>
+      <textarea id="quotationNotes" rows="2" placeholder="Any additional notes"></textarea>
+    </div>
+    
+    <div class="form-actions">
+      <button class="secondary" onclick="showDashboard()">Cancel</button>
+      <button class="primary" onclick="submitQuotation()">Create</button>
+    </div>
+  </div>
+
+  <!-- Bill Creation Form -->
+  <div id="createBillForm" class="create-form">
+    <div class="form-header">
+      <i class="ri-arrow-left-line" style="font-size: 20px; cursor: pointer; margin-right: 10px;" onclick="showDashboard()"></i>
+      <h3>Create Bill</h3>
+    </div>
+    
+    <div class="form-group">
+      <label for="billClientName">Client Name</label>
+      <input type="text" id="billClientName" placeholder="Enter client name">
+    </div>
+    
+    <div class="form-group">
+      <label for="billDate">Date</label>
+      <input type="date" id="billDate">
+    </div>
+    
+    <div class="form-group">
+      <label>Items</label>
+      <div class="item-list" id="billItemsList">
+        <div class="no-items">
+          <i class="ri-file-list-line"></i>
+          <p>No items added yet</p>
+        </div>
+      </div>
+      <button class="add-item-btn" onclick="showItemModal('bill')">
+        <i class="ri-add-line"></i> Add Item
+      </button>
+    </div>
+    
+    <div class="item-total-card">
+      <div class="item-total-row">
+        <span>Subtotal</span>
+        <span id="billSubtotal">₹0</span>
+      </div>
+      <div class="item-total-row">
+        <span>Tax (5%)</span>
+        <span id="billTax">₹0</span>
+      </div>
+      <div class="item-total-row">
+        <span>Total Amount</span>
+        <span id="billTotalAmount">₹0</span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="billPaymentMethod">Payment Method</label>
+      <select id="billPaymentMethod">
+        <option value="">Select payment method</option>
+        <option value="cash">Cash</option>
+        <option value="bank">Bank Transfer</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="upi">UPI</option>
+      </select>
+    </div>
+    
+    <div class="form-actions">
+      <button class="secondary" onclick="showDashboard()">Cancel</button>
+      <button class="primary" onclick="submitBill()">Create</button>
+    </div>
+  </div>
+
+  <!-- Item Modal (Enhanced) -->
+  <div id="itemModal" class="item-modal">
+    <div class="item-modal-header">
+      <h3 id="itemModalTitle">Add New Item</h3>
+      <i class="ri-close-line" onclick="hideItemModal()"></i>
+    </div>
+    
+    <div class="form-group">
+      <label for="itemName">Item Name</label>
+      <input type="text" id="itemName" placeholder="Enter item name" class="item-form-full">
+    </div>
+    
+    <div class="form-group">
+      <label for="itemDescription">Description</label>
+      <textarea id="itemDescription" rows="2" placeholder="Enter description (optional)" class="item-form-full"></textarea>
+    </div>
+    
+    <div class="item-form-grid">
+      <div class="form-group">
+        <label for="itemQuantity">Quantity</label>
+        <input type="number" id="itemQuantity" placeholder="Enter quantity" value="1" min="1">
+      </div>
+      
+      <div class="form-group">
+        <label for="itemPrice">Price (₹)</label>
+        <input type="number" id="itemPrice" placeholder="Enter price" min="0" step="0.01">
+      </div>
+    </div>
+    
+    <div class="item-form-buttons">
+      <button class="secondary" onclick="hideItemModal()">Cancel</button>
+      <button class="primary" onclick="addItem()">Add Item</button>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" onclick="closePopup()"></div>
+
+  <!-- Popups -->
+  <div id="actionPopup" class="popup">
+    <div class="popup-header">
+      <h3>Create New</h3>
+      <i class="ri-close-line" onclick="closePopup()"></i>
+    </div>
+    <div class="popup-options">
+      <button onclick="showCreateForm('quotation')">
+        <i class="ri-file-add-line"></i>
+        Quotation
+      </button>
+      <button onclick="showCreateForm('bill')">
+        <i class="ri-receipt-line"></i>
+        Billing
+      </button>
+    </div>
+    <button class="cancel-btn" onclick="closePopup()">
+      <i class="ri-close-line"></i> Cancel
+    </button>
+  </div>
+
+  <div id="listPopup" class="popup">
+    <div class="popup-header">
+      <h3>View Lists</h3>
+      <i class="ri-close-line" onclick="closePopup()"></i>
+    </div>
+    <div class="popup-options">
+      <button onclick="showList('quotation')">
+        <i class="ri-file-list-3-line"></i>
+        Quotations
+      </button>
+      <button onclick="showList('bill')">
+        <i class="ri-bill-line"></i>
+        Bills
+      </button>
+    </div>
+    <button class="cancel-btn" onclick="closePopup()">
+      <i class="ri-close-line"></i> Cancel
+    </button>
+  </div>
+
+  <!-- Document Preview Popup -->
+  <div id="documentPopup" class="popup" style="max-width: 380px; bottom: auto; top: 50%; transform: translateX(-50%) translateY(-50%);">
+    <div class="popup-header">
+      <h3 id="documentTitle">Document Preview</h3>
+      <i class="ri-close-line" onclick="closeDocument()"></i>
+    </div>
+    <div style="padding: 16px 0; text-align: center;">
+      <i id="documentIcon" class="ri-file-text-line" style="font-size: 48px; color: var(--primary); margin-bottom: 15px;"></i>
+      <h4 id="documentName" style="margin: 0 0 5px; font-size: 18px;">Quotation #1001</h4>
+      <p id="documentClient" style="color: var(--text-light); margin: 0 0 15px;">Client: ABC Corp</p>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+        <div>
+          <div style="font-size: 12px; color: var(--text-light);">Date</div>
+          <div id="documentDate">12 Jun 2023</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; color: var(--text-light);">Amount</div>
+          <div id="documentAmount" style="font-weight: 700; color: var(--primary-dark);">₹2,000</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; color: var(--text-light);">Status</div>
+          <div id="documentStatus" style="color: var(--primary);">Pending</div>
+        </div>
+      </div>
+      <div style="background: #f1f5f9; border-radius: var(--radius-sm); padding: 15px; text-align: left; margin-bottom: 15px;">
+        <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">Items</div>
+        <div style="font-size: 13px; color: var(--text-light);" id="documentItemsList">
+          <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+            <span>Web Design</span>
+            <span>₹1,200</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+            <span>Development</span>
+            <span>₹800</span>
+          </div>
+        </div>
+      </div>
+      <button style="width: 100%; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); padding: 12px; font-weight: 600; cursor: pointer; transition: var(--transition);">
+        Send to Client
+      </button>
+      <button onclick="closeDocument()" style="width: 100%; background: transparent; color: var(--text-light); border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 12px; font-weight: 600; margin-top: 10px; cursor: pointer; transition: var(--transition);">
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <i id="navHome" class="ri-home-line active" onclick="showDashboard()"></i>
+    <i id="navSearch" class="ri-search-line" onclick="showSearch()"></i>
+    <i id="navAdd" class="ri-add-circle-line primary" onclick="showPopup('action')"></i>
+    <i id="navList" class="ri-list-check-2" onclick="showPopup('list')"></i>
+    <i id="navProfile" class="ri-user-line" onclick="showProfile()"></i>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // DOM elements
+    const sections = {
+      dashboard: document.getElementById("dashboardSection"),
+      quotation: document.getElementById("quotationSection"),
+      bill: document.getElementById("billSection"),
+      search: document.getElementById("searchSection"),
+      profile: document.getElementById("profileSection"),
+      createQuotation: document.getElementById("createQuotationForm"),
+      createBill: document.getElementById("createBillForm")
+    };
+    
+    const navIcons = {
+      home: document.getElementById("navHome"),
+      search: document.getElementById("navSearch"),
+      add: document.getElementById("navAdd"),
+      list: document.getElementById("navList"),
+      profile: document.getElementById("navProfile")
+    };
+    
+    const overlay = document.getElementById("overlay");
+    const actionPopup = document.getElementById("actionPopup");
+    const listPopup = document.getElementById("listPopup");
+    const documentPopup = document.getElementById("documentPopup");
+    const itemModal = document.getElementById("itemModal");
+    
+    // Item management
+    let currentFormType = ''; // 'quotation' or 'bill'
+    let items = {
+      quotation: [],
+      bill: []
+    };
+    let editingItemIndex = -1;
+    
+    // Active section tracking
+    let activeSection = 'dashboard';
+    
+    // Show section function
+    function showSection(sectionId) {
+      // Hide all sections
+      Object.values(sections).forEach(section => {
+        section.classList.remove('section-active');
+        section.style.display = 'none';
+      });
+      
+      // Show selected section
+      sections[sectionId].style.display = 'block';
+      setTimeout(() => {
+        sections[sectionId].classList.add('section-active');
+      }, 10);
+      
+      // Update active section
+      activeSection = sectionId;
+      
+      // Update active nav icon
+      Object.values(navIcons).forEach(icon => icon.classList.remove('active'));
+      
+      if (sectionId === 'dashboard') navIcons.home.classList.add('active');
+      if (sectionId === 'search') navIcons.search.classList.add('active');
+      if (sectionId === 'profile') navIcons.profile.classList.add('active');
+    }
+    
+    // Show dashboard function
+    function showDashboard() {
+      showSection('dashboard');
+    }
+    
+    // Show list function
+    function showList(type) {
+      closePopup();
+      showSection(type);
+      
+      // Remove active state from bottom nav since lists are not directly accessible
+      Object.values(navIcons).forEach(icon => icon.classList.remove('active'));
+    }
+    
+    // Show search function
+    function showSearch() {
+      showSection('search');
+      // Focus on search input
+      document.getElementById('searchInput').focus();
+    }
+    
+    // Show profile function
+    function showProfile() {
+      showSection('profile');
+    }
+    
+    // Show create form function
+    function showCreateForm(type) {
+      closePopup();
+      if (type === 'quotation') {
+        showSection('createQuotation');
+      } else if (type === 'bill') {
+        showSection('createBill');
+      }
+    }
+    
+    // Show popup function
+    function showPopup(type) {
+      overlay.style.display = "block";
+      actionPopup.style.display = "none";
+      listPopup.style.display = "none";
+      documentPopup.style.display = "none";
+
+      if (type === 'action') {
+        actionPopup.style.display = "block";
+      } else if (type === 'list') {
+        listPopup.style.display = "block";
+      } else if (type === 'document') {
+        documentPopup.style.display = "block";
+      }
+    }
+
+    // Close popup function
+    function closePopup() {
+      overlay.style.display = "none";
+      actionPopup.style.display = "none";
+      listPopup.style.display = "none";
+      documentPopup.style.display = "none";
+    }
+    
+    // Show item modal
+    function showItemModal(formType) {
+      currentFormType = formType;
+      editingItemIndex = -1; // Reset editing index
+      
+      // Reset form
+      document.getElementById('itemName').value = '';
+      document.getElementById('itemDescription').value = '';
+      document.getElementById('itemQuantity').value = '1';
+      document.getElementById('itemPrice').value = '';
+      
+      // Show modal
+      document.getElementById('itemModalTitle').textContent = 'Add New Item';
+      itemModal.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+    
+    // Hide item modal
+    function hideItemModal() {
+      itemModal.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+    
+    // Edit item
+    function editItem(formType, index) {
+      currentFormType = formType;
+      editingItemIndex = index;
+      const item = items[formType][index];
+      
+      // Fill form with item data
+      document.getElementById('itemName').value = item.name;
+      document.getElementById('itemDescription').value = item.description || '';
+      document.getElementById('itemQuantity').value = item.quantity;
+      document.getElementById('itemPrice').value = item.price;
+      
+      // Show modal
+      document.getElementById('itemModalTitle').textContent = 'Edit Item';
+      itemModal.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+    
+    // Delete item
+    function deleteItem(formType, index) {
+      items[formType].splice(index, 1);
+      renderItems(formType);
+      updateTotalAmount(formType);
+    }
+    
+    // Add or update item
+    function addItem() {
+      const name = document.getElementById('itemName').value;
+      const description = document.getElementById('itemDescription').value;
+      const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
+      const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+      
+      if (!name || !price) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const item = {
+        name,
+        description,
+        quantity,
+        price,
+        total: quantity * price
+      };
+      
+      if (editingItemIndex >= 0) {
+        // Update existing item
+        items[currentFormType][editingItemIndex] = item;
+      } else {
+        // Add new item
+        items[currentFormType].push(item);
+      }
+      
+      // Update UI
+      renderItems(currentFormType);
+      updateTotalAmount(currentFormType);
+      hideItemModal();
+    }
+    
+    // Render items list
+    function renderItems(formType) {
+      const container = document.getElementById(`${formType}ItemsList`);
+      container.innerHTML = '';
+      
+      if (items[formType].length === 0) {
+        container.innerHTML = `
+          <div class="no-items">
+            <i class="ri-file-list-line"></i>
+            <p>No items added yet</p>
+          </div>
+        `;
+        return;
+      }
+      
+      items[formType].forEach((item, index) => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'item-card';
+        itemElement.innerHTML = `
+          <div class="item-details">
+            <div class="item-name">${item.name}</div>
+            <div class="item-meta">
+              <span>Qty: ${item.quantity}</span>
+              <span>Price: ₹${item.price.toFixed(2)}</span>
+            </div>
+          </div>
+          <div class="item-price">₹${item.total.toFixed(2)}</div>
+          <div class="item-actions">
+            <i class="ri-edit-line" onclick="editItem('${formType}', ${index})"></i>
+            <i class="ri-delete-bin-line" onclick="deleteItem('${formType}', ${index})"></i>
+          </div>
+        `;
+        container.appendChild(itemElement);
+      });
+    }
+    
+    // Calculate and update total amount
+    function updateTotalAmount(formType) {
+      const subtotal = items[formType].reduce((sum, item) => sum + item.total, 0);
+      const tax = subtotal * 0.05; // 5% tax
+      const total = subtotal + tax;
+      
+      document.getElementById(`${formType}Subtotal`).textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById(`${formType}Tax`).textContent = `₹${tax.toFixed(2)}`;
+      document.getElementById(`${formType}TotalAmount`).textContent = `₹${total.toFixed(2)}`;
+    }
+    
+    // Submit quotation function
+    function submitQuotation() {
+      const clientName = document.getElementById('clientName').value;
+      const quotationDate = document.getElementById('quotationDate').value;
+      const notes = document.getElementById('quotationNotes').value;
+      
+      if (!clientName || !quotationDate || items.quotation.length === 0) {
+        alert('Please fill in all required fields and add at least one item');
+        return;
+      }
+      
+      const totalAmount = items.quotation.reduce((sum, item) => sum + item.total, 0);
+      
+      // In a real app, this would submit to a server
+      alert(`Quotation created for ${clientName} with ${items.quotation.length} items (Total: ₹${totalAmount.toFixed(2)})`);
+      
+      // Reset form
+      document.getElementById('clientName').value = '';
+      document.getElementById('quotationDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('quotationNotes').value = '';
+      items.quotation = [];
+      renderItems('quotation');
+      updateTotalAmount('quotation');
+      
+      showDashboard();
+    }
+    
+    // Submit bill function
+    function submitBill() {
+      const clientName = document.getElementById('billClientName').value;
+      const billDate = document.getElementById('billDate').value;
+      const paymentMethod = document.getElementById('billPaymentMethod').value;
+      
+      if (!clientName || !billDate || !paymentMethod || items.bill.length === 0) {
+        alert('Please fill in all required fields and add at least one item');
+        return;
+      }
+      
+      const totalAmount = items.bill.reduce((sum, item) => sum + item.total, 0);
+      
+      // In a real app, this would submit to a server
+      alert(`Bill created for ${clientName} with ${items.bill.length} items (Total: ₹${totalAmount.toFixed(2)}, Payment: ${paymentMethod})`);
+      
+      // Reset form
+      document.getElementById('billClientName').value = '';
+      document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('billPaymentMethod').value = '';
+      items.bill = [];
+      renderItems('bill');
+      updateTotalAmount('bill');
+      
+      showDashboard();
+    }
+    
+    // Open document function
+    function openDocument(type, id) {
+      // Set document details based on type and ID
+      const docTitle = document.getElementById('documentTitle');
+      const docIcon = document.getElementById('documentIcon');
+      const docName = document.getElementById('documentName');
+      const docClient = document.getElementById('documentClient');
+      const docDate = document.getElementById('documentDate');
+      const docAmount = document.getElementById('documentAmount');
+      const docStatus = document.getElementById('documentStatus');
+      const docItemsList = document.getElementById('documentItemsList');
+      
+      if (type === 'quotation') {
+        docTitle.textContent = 'Quotation Preview';
+        docIcon.className = 'ri-file-text-line';
+        
+        // Simulate fetching document data
+        switch(id) {
+          case '1001':
+            docName.textContent = 'Quotation #1001';
+            docClient.textContent = 'Client: ABC Corp';
+            docDate.textContent = '12 Jun 2023';
+            docAmount.textContent = '₹2,000';
+            docStatus.textContent = 'Pending';
+            docStatus.style.color = '#f59e0b';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Web Design (Qty: 1)</span>
+                <span>₹1,200</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Development (Qty: 1)</span>
+                <span>₹800</span>
+              </div>
+            `;
+            break;
+          case '1002':
+            docName.textContent = 'Quotation #1002';
+            docClient.textContent = 'Client: XYZ Ltd';
+            docDate.textContent = '8 Jun 2023';
+            docAmount.textContent = '₹1,800';
+            docStatus.textContent = 'Approved';
+            docStatus.style.color = '#10b981';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Logo Design (Qty: 1)</span>
+                <span>₹800</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Branding (Qty: 1)</span>
+                <span>₹1,000</span>
+              </div>
+            `;
+            break;
+          case '1003':
+            docName.textContent = 'Quotation #1003';
+            docClient.textContent = 'Client: Example Inc';
+            docDate.textContent = '1 Jun 2023';
+            docAmount.textContent = '₹3,500';
+            docStatus.textContent = 'Rejected';
+            docStatus.style.color = '#ef4444';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Mobile App (Qty: 1)</span>
+                <span>₹2,500</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Backend API (Qty: 1)</span>
+                <span>₹1,000</span>
+              </div>
+            `;
+            break;
+          default:
+            docName.textContent = 'Quotation #' + id;
+            docClient.textContent = 'Client: Unknown';
+            docDate.textContent = 'Date unknown';
+            docAmount.textContent = '₹0';
+            docStatus.textContent = 'Draft';
+            docStatus.style.color = '#64748b';
+        }
+      } else if (type === 'bill') {
+        docTitle.textContent = 'Bill Preview';
+        docIcon.className = 'ri-bill-line';
+        
+        // Simulate fetching document data
+        switch(id) {
+          case '5001':
+            docName.textContent = 'Bill #5001';
+            docClient.textContent = 'Client: ABC Corp';
+            docDate.textContent = '15 Jun 2023';
+            docAmount.textContent = '₹3,400';
+            docStatus.textContent = 'Paid';
+            docStatus.style.color = '#10b981';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Web Hosting (Qty: 1)</span>
+                <span>₹1,200</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Domain Registration (Qty: 2)</span>
+                <span>₹1,100</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>SSL Certificate (Qty: 1)</span>
+                <span>₹1,100</span>
+              </div>
+            `;
+            break;
+          case '5002':
+            docName.textContent = 'Bill #5002';
+            docClient.textContent = 'Client: XYZ Ltd';
+            docDate.textContent = '10 Jun 2023';
+            docAmount.textContent = '₹2,500';
+            docStatus.textContent = 'Overdue';
+            docStatus.style.color = '#ef4444';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Software License (Qty: 2)</span>
+                <span>₹1,500</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Support (Qty: 1)</span>
+                <span>₹1,000</span>
+              </div>
+            `;
+            break;
+          case '5003':
+            docName.textContent = 'Bill #5003';
+            docClient.textContent = 'Client: Global Tech';
+            docDate.textContent = '5 Jun 2023';
+            docAmount.textContent = '₹5,700';
+            docStatus.textContent = 'Pending';
+            docStatus.style.color = '#f59e0b';
+            
+            // Set items
+            docItemsList.innerHTML = `
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Consulting (Qty: 10)</span>
+                <span>₹3,000</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Training (Qty: 3)</span>
+                <span>₹2,700</span>
+              </div>
+            `;
+            break;
+          default:
+            docName.textContent = 'Bill #' + id;
+            docClient.textContent = 'Client: Unknown';
+            docDate.textContent = 'Date unknown';
+            docAmount.textContent = '₹0';
+            docStatus.textContent = 'Draft';
+            docStatus.style.color = '#64748b';
+        }
+      }
+      
+      showPopup('document');
+    }
+    
+    // Close document function
+    function closeDocument() {
+      closePopup();
+    }
+
+    // Close popup when clicking outside
+    document.addEventListener('click', function(event) {
+      if (event.target === overlay) {
+        closePopup();
+        hideItemModal();
+      }
+    });
+
+    // Add keyboard escape support
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closePopup();
+        hideItemModal();
+      }
+    });
+    
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set dashboard as active
+      showDashboard();
+      
+      // Set today's date as default in forms
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('quotationDate').value = today;
+      document.getElementById('billDate').value = today;
+      
+      // Initialize empty item lists
+      renderItems('quotation');
+      renderItems('bill');
+      
+      // Add search functionality
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('keyup', function() {
+        if (searchInput.value.length > 2) {
+          // In a real app, this would trigger a search
+          console.log('Searching for:', searchInput.value);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
